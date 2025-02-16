@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package demo;
+
+message Page {
+    string html = 1;
+    string url = 2;
+}
+
+message BookData { 
+    string name = 1;
+    string availability = 2;
+    string upc = 3;
+    string price_excl_tax = 4;
+    string tax = 5;
+}
+
+message BookResult {
+    bool is_valid = 1;
+    optional BookData data = 2;
+}
+
+service Parser {
+    rpc ParseBookPage (Page) returns (BookResult);
+}
