@@ -1,0 +1,31 @@
+---
+version: "3.9"
+
+services:
+
+  grpc-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"  # Exposes the port to host machine
+    networks:
+      - project-net
+
+  grpc-client:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    depends_on:
+      - grpc-server
+    networks:
+      - project-net
+    environment:
+      - GRPC_PARSER_ADDRESS=grpc-server:50051  # Correct service name for Docker DNS
+    volumes:
+      - /tmp/books-output:/app/output
+
+
+networks:
+  project-net:
+    driver: bridge
